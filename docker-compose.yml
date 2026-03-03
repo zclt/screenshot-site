@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  screenshot:
+    build: .
+    container_name: screenshot-site
+    volumes:
+      - ./screenshots:/app/screenshots
+    environment:
+      - DISPLAY=:99
+    command: ["python", "main.py", "https://www.example.com"]
+    # Para passar a URL como parâmetro, use:
+    # docker-compose run screenshot python main.py https://sua-url-aqui.com

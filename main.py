@@ -7,6 +7,7 @@ from io import BytesIO
 import argparse
 import sys
 from datetime import datetime
+import os
 
 # Configuração dos argumentos de linha de comando
 parser = argparse.ArgumentParser(description='Faz screenshot de uma página web')
@@ -38,7 +39,15 @@ image = Image.open(BytesIO(screenshot))
 # Salve a imagem
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 filename = f"screenshot-{timestamp}.png"
-image.save(filename)
+
+# Definir diretório de saída (screenshots para Docker, atual para local)
+output_dir = "screenshots" if os.path.exists("/app") else "."
+os.makedirs(output_dir, exist_ok=True)
+filepath = os.path.join(output_dir, filename)
+
+image.save(filepath)
 
 # Feche o driver
 driver.quit()
+
+print(f"Screenshot salvo como: {filepath}")
